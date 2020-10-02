@@ -1,0 +1,62 @@
+* {
+    font-family: 'David Libre', serif;
+    font-family: 'Quicksand', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #fff;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.container {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.8 );
+    box-shadow: 12px 7px 90px 0 rgba(110,123,131,.3);
+    padding-bottom: 30px;
+}
+
+.top-section {
+    width: 500px;
+    height: 200px;
+    position: relative;
+    margin: 0;
+    margin-bottom: 10px;
+    background-image: url('bank.jpg');
+    background-size: 100% 120%;
+    background-repeat: no-repeat;
+    border-radius: 30px 30px 0 0;
+}
+
+h1 {
+    font-family: 'David Libre';
+}
+
+.title {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.user-title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* .user-list:first-child {
+    border-top: 1px solid #e7e7e7;
+} */
+
+/* .user-list:nth-child(even) {
+    background-color: #f7f7f7;
+} */
+
+.image {
+    width: 120px;
+    height: 120px;
+}
