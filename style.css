@@ -69,6 +69,16 @@ h1 {
     background-color: #fff;
 }
 
+.btn-label {
+    font-size: 15px;
+}
+
+.transaction-buttons {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
 .user-container {
     margin-top: 40px;
 }
