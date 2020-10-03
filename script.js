@@ -38,10 +38,9 @@ var bankController = (function() {
                     newAmount = parseFloat(u.amount) + parseFloat(amount.depositAmt);
                     u.amount = newAmount;
                     var userCard = document.querySelector(`#user-${u.id}`);
-                    // console.log(userCard);
                     var userAmount = userCard.querySelector('.user-amount');
-                    userAmount.innerHTML = u.amount;
-                }
+                    userAmount.innerHTML = (u.amount);
+                } 
             })
         },
 
@@ -98,7 +97,7 @@ var UIController = (function() {
         depositBtn: '#depositBtn',
         withdrawBtn: '#withdrawBtn',
         sendBtn: '#sendBtn',
-    }
+    }    
 
     return {
         getUser: function() {
@@ -146,7 +145,7 @@ var UIController = (function() {
             // replace placeholder text with actual data
             newHtml = html.replace('%id%', obj.id);
             newHtml = newHtml.replace('%username%', obj.user);
-            newHtml = newHtml.replace('%amount%', obj.amount);
+            newHtml = newHtml.replace('%amount%', (obj.amount));
 
             // insert html into the DOM
             document.querySelector(HTMLelements.userContainer).insertAdjacentHTML('beforeend', newHtml);
