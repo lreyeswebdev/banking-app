@@ -182,7 +182,6 @@ var controller = (function(bankCtrl, UICtrl){
 
         // 1. Get user input data
         user = UICtrl.getUser();
-        // console.log(user);
 
         if (user.username !== "" && isNaN(user.username)) {
             // 2. Add item to bank controller
@@ -200,11 +199,17 @@ var controller = (function(bankCtrl, UICtrl){
         // 1. get depositor input data
         user = UICtrl.getUser();
 
-        // 2. get amount to deposit
-        amount = UICtrl.getDeposit();
+        if (user.username !== "" && isNaN(user.username)) {            
+            // 2. get amount to deposit
+            amount = UICtrl.getDeposit();
 
-        // 3. update user account balance
-        bankCtrl.deposit(user, amount);
+            // 3. update user account balance
+            bankCtrl.deposit(user, amount);                        
+
+        } else {
+            alert('Please provide a valid username that uses letters and please do not leave the field blank.');
+        }
+        
     };
 
     var ctrlWithdraw = function() {
@@ -212,11 +217,16 @@ var controller = (function(bankCtrl, UICtrl){
         // 1. get user to withdraw
         user = UICtrl.getUser();
 
-        // 2. get amount to withdraw
-        amount = UICtrl.getWithdrawal();
+        if (user.username !== "" && isNaN(user.username)) {
+            // 2. get amount to withdraw
+            amount = UICtrl.getWithdrawal();
 
-        // 3. update user account balance
-        bankCtrl.withdraw(user, amount);
+            // 3. update user account balance
+            bankCtrl.withdraw(user, amount);
+        } else {
+            alert('Please provide a valid username that uses letters and please do not leave the field blank.');
+        }
+        
     };
     
     var ctrlSend = function() {
@@ -244,4 +254,3 @@ var controller = (function(bankCtrl, UICtrl){
 })(bankController, UIController);
 
 controller.init();
-
