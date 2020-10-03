@@ -30,16 +30,56 @@ var bankController = (function() {
             return newUser;
         },
 
-        deposit: function(user) {
-            // add deposit amount to amount
-            // update data structure
-            // return new balance amount
+        deposit: function(user, amount) {
+            var newAmount;                       
+
+            allUsers.map(u => {                
+                if (user.username == u.user) {
+                    newAmount = parseFloat(u.amount) + parseFloat(amount.depositAmt);
+                    u.amount = newAmount;
+                    var userCard = document.querySelector(`#user-${u.id}`);
+                    // console.log(userCard);
+                    var userAmount = userCard.querySelector('.user-amount');
+                    userAmount.innerHTML = u.amount;
+                }
+            })
         },
 
-        getBalance: function(id) {
-            var balance = allUsers[id].amount;
-            return balance;
+        withdraw: function(user, amount) {
+            var newAmount;
+
+            allUsers.map(u => {                
+                if (user.username == u.user) {
+                    newAmount = parseFloat(u.amount) - parseFloat(amount.withdrawAmt);
+                    u.amount = newAmount;
+                    var userCard = document.querySelector(`#user-${u.id}`);
+                    var userAmount = userCard.querySelector('.user-amount');
+                    userAmount.innerHTML = u.amount;
+                }
+            })
         },
+
+        send: function(from_user, to_user, amount) {
+            var newSenderAmt, newReceiverAmt;
+
+            allUsers.map(u => {
+                if (from_user.fromUser == u.user) {
+                    newSenderAmt = parseFloat(u.amount) - parseFloat(amount.sendAmt);
+                    u.amount = newSenderAmt;
+                    var userCard = document.querySelector(`#user-${u.id}`);
+                    var userAmount = userCard.querySelector('.user-amount');
+                    userAmount.innerHTML = u.amount;
+                }
+                
+                if (to_user.toUser == u.user) {
+                    newReceiverAmt = parseFloat(u.amount) + parseFloat(amount.sendAmt);
+                    u.amount = newReceiverAmt;
+                    var userCard = document.querySelector(`#user-${u.id}`);
+                    var userAmount = userCard.querySelector('.user-amount');
+                    userAmount.innerHTML = u.amount;
+                }
+            })
+        },        
 
         testing: function() {
             console.log(allUsers);
@@ -55,7 +95,9 @@ var UIController = (function() {
         // add here the list of html elements to be used to avoid repetition
         createUserBtn: '#createUserBtn',
         userContainer: '.user-list',
-        getBalance: '.balBtn'
+        depositBtn: '#depositBtn',
+        withdrawBtn: '#withdrawBtn',
+        sendBtn: '#sendBtn',
     }
 
     return {
@@ -77,7 +119,13 @@ var UIController = (function() {
             };
         },
 
-        getReceive: function() {
+        getSender: function() {
+            return {
+                fromUser: prompt('Who will send the amount?')
+            }
+        },
+
+        getReceiver: function() {
             return {
                 toUser: prompt('To whom will you send the amount to?')
             };
@@ -93,11 +141,12 @@ var UIController = (function() {
             var html, newHtml;
 
             // create html string with placeholder text
-            html = '<div class="user-card" id="user-%id%"><h3>%username%</h3><img src="head.jpg" alt="User image" class="image"><div class="card-buttons"><button class="depositBtn">Deposit</button><button class="withdrawBtn">Withdraw</button><button class="sendBtn">Send</button><button class="balBtn">Get Balance</button></div></div>';
+            html = '<div class="user-card" id="user-%id%"><h3>%username%</h3><img src="head.jpg" alt="User image" class="image"><div class="amount-title">Account Balance:</div><div class="user-amount">%amount%</div></div>';
 
             // replace placeholder text with actual data
             newHtml = html.replace('%id%', obj.id);
             newHtml = newHtml.replace('%username%', obj.user);
+            newHtml = newHtml.replace('%amount%', obj.amount);
 
             // insert html into the DOM
             document.querySelector(HTMLelements.userContainer).insertAdjacentHTML('beforeend', newHtml);
@@ -119,15 +168,14 @@ var controller = (function(bankCtrl, UICtrl){
         document.querySelector(html.createUserBtn).addEventListener('click', ctrlAddUser);
 
         // Deposit to user
-        
+        document.querySelector(html.depositBtn).addEventListener('click', ctrlDeposit);
 
         // Withdraw from user
+        document.querySelector(html.withdrawBtn).addEventListener('click', ctrlWithdraw);
 
         // Send to another user
-
-        // Display balance
-        // document.querySelector(html.getBalance).addEventListener('click', ctrlGetBalance);
-
+        document.querySelector(html.sendBtn).addEventListener('click', ctrlSend);
+        
     };
     
     var ctrlAddUser = function() {
@@ -148,23 +196,43 @@ var controller = (function(bankCtrl, UICtrl){
         }
     };
 
-    var ctrlDepost = function() {
+    var ctrlDeposit = function() {
+        var user, amount;
+        // 1. get depositor input data
+        user = UICtrl.getUser();
 
+        // 2. get amount to deposit
+        amount = UICtrl.getDeposit();
+
+        // 3. update user account balance
+        bankCtrl.deposit(user, amount);
+    };
+
+    var ctrlWithdraw = function() {
+        var user, amount;
+        // 1. get user to withdraw
+        user = UICtrl.getUser();
+
+        // 2. get amount to withdraw
+        amount = UICtrl.getWithdrawal();
+
+        // 3. update user account balance
+        bankCtrl.withdraw(user, amount);
     };
     
-    var ctrlGetBalance = function() {
-        // var itemID, splitID, ID;
+    var ctrlSend = function() {
+        var from_user, to_user, amount;
+        // 1. get sender name
+        from_user = UICtrl.getSender();
 
-        // itemID = event.target.parentNode.parentNode.id;
+        // 2. get receiver name
+        to_user = UICtrl.getReceiver();
 
-        // if (itemID) {
-        //     splitID = itemID.split('-');
-        //     ID = parseInt(splitID[1]);
+        // 3. get amount to send
+        amount = UICtrl.getSendAmount();
 
-        //     alert('The balance is Php ' + bankCtrl.getBalance(ID));
-        // }
-        
-        
+        // 4. update user account balances
+        bankCtrl.send(from_user, to_user, amount);
     };
     
     return {
